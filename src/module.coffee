@@ -1,30 +1,30 @@
 angular.module('ngSimpleDaterangepicker', [])
 .provider 'ngSimpleDaterangepicker', ->
-  dateRanges =
-    'Przyszły tydzień': [moment(), moment().add(7, 'days')]
-    'Jutro': [moment().add(1, 'days'), moment().add(1, 'days')]
-    'Dzisiaj': [moment(), moment()]
-    'Wczoraj': [moment().subtract(1, 'days'), moment().subtract(1, 'days')]
-    'Ubiegły tydzień': [moment().subtract(7, 'days'), moment()]
 
-  locale =
-    fromLabel: 'Od'
-    toLabel: 'Do'
-    applyLabel: 'OK'
-    cancelLabel: 'Wyczyść'
-    customRangeLabel: 'Inne'
+  defaultOptions =
+    ranges:
+      'Przyszły miesiąc': [moment(), moment().add(1, 'month')]
+      'Przyszły tydzień': [moment(), moment().add(7, 'days')]
+      'Jutro': [moment().add(1, 'days'), moment().add(1, 'days')]
+      'Dzisiaj': [moment(), moment()]
+      'Wczoraj': [moment().subtract(1, 'days'), moment().subtract(1, 'days')]
+      'Ubiegły tydzień': [moment().subtract(7, 'days'), moment()]
+      'Ubiegły miesiąc': [moment().subtract(1, 'month'), moment()]
+    locale:
+      fromLabel: 'Od'
+      toLabel: 'Do'
+      applyLabel: 'OK'
+      cancelLabel: 'Wyczyść'
+      customRangeLabel: 'Inne'
 
-  @setDefaultDateRanges = (defaultDateRanges) ->
-    dateRanges = defaultDateRanges
+  @setDefaultOptions = (options) ->
+    defaultOptions = options
 
-  @setDefaultLocale = (defaultLocale) ->
-    locale = defaultLocale
+  @getDefaultOptions = ->
+    defaultOptions
 
   @$get = ->
-    getDefaultDateRanges: ->
-      dateRanges
-
-    getDefaultLocale: ->
-      locale
+    getDefaultOptions: ->
+      defaultOptions
 
   return

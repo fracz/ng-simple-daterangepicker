@@ -9,21 +9,18 @@ angular.module('ngSimpleDaterangepicker')
     minDate = if $scope.minDate == 'today' then moment().startOf('day') else $scope.minDate
     maxDate = if $scope.maxDate == 'today' then moment().endOf('day') else $scope.maxDate
 
-    ranges = ngSimpleDaterangepicker.getDefaultDateRanges()
+    config = angular.extend(ngSimpleDaterangepicker.getDefaultOptions(), $scope.options or {})
 
     # calculate which ranges to display based on min and maxDate; range will be displayed only if it fits the min-max period fully
     # this varies from the deafult daterangepicker behavior (it displays the range if it intersects with min-max)
     rangeIsBetweenMinAndMax = (range) ->
       (!minDate or range[0].isAfter(minDate)) and (!maxDate or range[1].isBefore(maxDate))
     displayableRanges = {}
-    displayableRanges[label] = range for label, range of ranges when rangeIsBetweenMinAndMax(range)
+    displayableRanges[label] = range for label, range of config.ranges when rangeIsBetweenMinAndMax(range)
 
-    config =
-      maxDate: maxDate
-      ranges: displayableRanges
-      locale: ngSimpleDaterangepicker.getDefaultLocale()
-
-    config = angular.extend(config, $scope.options)
+    config.maxDate = maxDate if maxDate
+    config.minDate = minDate if minDate
+    config.ranges = displayableRanges
 
     element.daterangepicker(config)
 
@@ -42,4 +39,7 @@ angular.module('ngSimpleDaterangepicker')
           endDate: moment(dateRangePicker.endDate).toDate()
 
       element.on 'cancel.daterangepicker', ->
+        dateRangePicker.setStartDate(moment())
+        dateRangePicker.setEndDate(moment())
         modelController.$setViewValue(null)
+        element.val('') if element.val()
